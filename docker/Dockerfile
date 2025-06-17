@@ -34,13 +34,18 @@ RUN adduser \
 # into this layer.
 RUN --mount=type=cache,target=/root/.cache/pip \
     --mount=type=bind,source=requirements.txt,target=requirements.txt \
-    python -m pip install -r requirements.txt
+    python -m pip install -r requirements.txt && \
+    mkdir -p /app/config && \
+    chown -R appuser:appuser /app/config && \
+    chmod -R 755 /app/config
 
 # Switch to the non-privileged user to run the application.
 USER appuser
 
 # Copy the source code into the container.
-COPY . .
+COPY *.py config.yaml.example .
+
+VOLUME /app/config
 
 # Expose the port that the application listens on.
 EXPOSE 57272

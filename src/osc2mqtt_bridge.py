@@ -5,6 +5,8 @@ protocols. It listens for OSC messages and publishes them to an MQTT topic, and 
 import time
 import logging
 import queue
+import shutil
+import os
 from collections.abc import Iterable
 import yaml
 from mqtt_handler import MQTTClientHandler
@@ -111,8 +113,24 @@ class OSC2MQTTBridge:
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
 
+    # if "config/config.yaml" does not exist
+    if not os.path.exists("config/config.yaml"):
+        # copy config.yaml.example to config.yaml
+        shutil.copy("config.yaml.example", "config/config.yaml")
+        logging.info(
+            "Copied config.yaml.example to config/config.yaml. Please edit the configuration file before running the bridge.")
+        # exit the program
+        raise SystemExit(
+            "Exiting due to missing configuration file. Please edit config/config.yaml.")
+
     with open("config/config.yaml", "r", encoding='utf-8') as config_file:
         yaml_config = yaml.safe_load(config_file)
+    
+    # verify that the config file is valid
+    crt=yaml_config["mqtt"]["connection"].get("ca_certs", None)
+    if crt and not os.path.exists(crt):
+        logging.error("CA certificate file %s does not exist.", crt)
+        raise SystemExit("Exiting due to missing CA certificate file.")
 
     bridge = OSC2MQTTBridge(yaml_config)
 

@@ -3,7 +3,7 @@ services:
     image: ldebs/osc2mqtt
     container_name: osc2mqtt
     volumes:
-      - ./config:/config
+      - ./config:/app/config
     ports:
       - 57272:57272
     restart: unless-stopped

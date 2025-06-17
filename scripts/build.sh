@@ -12,10 +12,11 @@ trap 'handle_error "$?" "$LINENO" "$(eval echo "$BASH_COMMAND")"' ERR
 set -x
 
 root="$(realpath "$(dirname "$0")/..")"
+mkdir -p "$root/build"
+rm -rf "$root/build"/*
 cp -r "$root/src"/* "$root/build/"
 cp "$root/docker/Dockerfile" "$root/build/"
-cp -r "$root/config" "$root/build/"
 
 cd "$root/build"
-docker build -t osc2mqtt .
-docker tag ldebs/osc2mqtt:latest ldebs/osc2mqtt:$(date +"%y%m%d")_$(git rev-parse --short HEAD)
+docker build -t osc2mqtt:latest .
+docker tag osc2mqtt:latest osc2mqtt:$(date +"%y%m%d")_$(git rev-parse --short HEAD)
