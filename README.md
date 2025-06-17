@@ -38,14 +38,31 @@ osc2mqtt/
 
 ## Quick Start
 
-### 1. Clone the Repository
+### With Docker compose
+Copy the `docker-compose.yaml` file from the `docker` directory.
+Create a `config` directory and make it accessible to everybody:
+```bash
+mkdir config
+chmod 777 config
+```
+Run `docker compose up`.
+
+The first run will create the `config/config.yaml` example file. Edit the configuration file to adapt to your environment.
+
+Run `docker compose up -d` to start the bridge in detached mode.
+
+Enjoy!
+
+### From source
+
+#### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/ldebs/osc2mqtt.git
 cd osc2mqtt
 ```
 
-### 2. Configure
+#### 2. Configure
 
 - Copy the example configuration:
 
@@ -58,16 +75,16 @@ cd osc2mqtt
 
 - If using TLS, place your CA certificate at the path specified in `ca_certs`.
 
-### 3. Build and Run (Docker Recommended)
+#### 3. Build and Run
 
-#### Manual Docker Build
+##### Manual Docker Build
 
 ```bash
 ./scripts/build.sh
 docker run --rm -v $(pwd)/config:/app/config -p 57272:57272 osc2mqtt
 ```
 
-#### Native (Without Docker)
+##### Native (Without Docker)
 
 1. Install dependencies:
 
