@@ -1,0 +1,17 @@
+mqtt:
+  connection:
+    broker: "mybroker.example.com"
+    port: 8883
+    client_id: "osc-to-mqtt"
+    username: "mqtt_user"
+    password: "mqtt_password"
+    ca_certs: "config/root.crt"
+  topics:
+    publish: "osc/stat"
+    subscribe: "osc/cmnd/openSC"
+
+osc:
+  net: "0.0.0.0"
+  port: 57272
+  max_connections: 10
+  unix_socket_path: "/tmp/osc.sock"
