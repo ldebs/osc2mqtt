@@ -118,6 +118,8 @@ class MQTTClientHandler:
         """
         Connect to the MQTT broker.
         """
+        logging.info("Connecting to MQTT Broker %s:%d as %s",
+                     self.broker, self.port, self.client_id)
         self.client.connect(self.broker, self.port)
 
     def publish_json(self, topic, message, qos=2, retain=False):

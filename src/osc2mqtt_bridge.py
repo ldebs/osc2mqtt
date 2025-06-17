@@ -48,6 +48,7 @@ class OSC2MQTTBridge:
             self.mqtt_handler.subscribe_json(topic_cmnd + "/#")
         except Exception as e:
             logging.error("Failed to start OSC2MQTTBridge: %s", str(e))
+            logging.error("Trace", e)
             raise SystemExit(
                 "Exiting due to failure in starting OSC2MQTTBridge.") from e
         self.mqtt_handler.start()
@@ -110,7 +111,7 @@ class OSC2MQTTBridge:
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
 
-    with open("config.yaml", "r", encoding='utf-8') as config_file:
+    with open("config/config.yaml", "r", encoding='utf-8') as config_file:
         yaml_config = yaml.safe_load(config_file)
 
     bridge = OSC2MQTTBridge(yaml_config)
