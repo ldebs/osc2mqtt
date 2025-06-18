@@ -14,44 +14,13 @@
 
 ---
 
-## Project Structure
-
-```
-osc2mqtt/
-├── docker/
-│   ├── Dockerfile
-│   └── docker-compose.yaml
-├── scripts/
-│   └── build.sh
-├── src/
-│   ├── config.yaml.example
-│   ├── mqtt_handler.py
-│   ├── osc2mqtt_bridge.py
-│   ├── osc_handler.py
-│   ├── requirements.txt
-│   ├── simple_thread.py
-│   └── t2u_osc_server.py
-└── .gitignore
-```
-
----
-
 ## Quick Start
 
-### With Docker compose
-Copy the `docker-compose.yaml` file from the `docker` directory.
-Create a `config` directory and make it accessible to everybody:
-```bash
-mkdir config
-chmod 777 config
+### Manually download the installer and run
 ```
-Run `docker compose up`.
-
-The first run will create the `config/config.yaml` example file. Edit the configuration file to adapt to your environment.
-
-Run `docker compose up -d` to start the bridge in detached mode.
-
-Enjoy!
+wget -O /tmp/setup.sh https://github.com/ldebs/osc2mqtt/raw/refs/heads/master/scripts/setup.sh
+bash /tmp/setup.sh
+```
 
 ### From source
 
@@ -108,21 +77,21 @@ Edit `config.yaml`:
 ```yaml
 mqtt:
   connection:
-    broker: "mybroker.example.com"
-    port: 8883
-    client_id: "osc-to-mqtt"
-    username: "mqtt_user"
-    password: "mqtt_password"
-    ca_certs: "config/root.crt"
+    broker: "mybroker.example.com" # hostname of the MQTT brocker, must match the certificate for TLS
+    port: 8883                     # port of the MQTT brocker
+    client_id: "osc-to-mqtt"       # Client ID to use to connect
+    username: "mqtt_user"          # User name
+    password: "mqtt_password"      # Password
+    ca_certs: "config/root.crt"    # Root certificate needed to validate the TLS
   topics:
-    publish: "osc/stat"
-    subscribe: "osc/cmnd/openSC"
+    publish: "osc/stat"            # Topic where to publish messages from OSC
+    subscribe: "osc/cmnd/openSC"   # Topic where to listen messages to OSC
 
 osc:
-  net: "0.0.0.0"
-  port: 57272
-  max_connections: 10
-  unix_socket_path: "/tmp/osc.sock"
+  net: "0.0.0.0"                    # network to listen for OSC tcp connexion
+  port: 57272                       # port to listen for OSC tcp connexion
+  max_connections: 10               # maximum connections to handle
+  unix_socket_path: "/tmp/osc.sock" # internal socket file
 ```
 
 - **mqtt.connection:** MQTT broker connection details.
@@ -135,7 +104,7 @@ osc:
 
 - Ensure your MQTT broker is reachable and the credentials are correct.
 - If using TLS, verify the CA certificate path.
-- Check logs for errors (`docker logs <container>` or console output).
+- Check logs for errors (`docker compose logs` or console output).
 
 ---
 
